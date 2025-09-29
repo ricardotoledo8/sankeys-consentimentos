@@ -1,31 +1,399 @@
-<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sankeys — Fluxos de Consentimento</title><style>body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:40px;max-width:980px} h1{margin-bottom:8px} .hint{color:#666;margin-bottom:24px} li{margin:6px 0}</style></head><body><h1>Sankeys — Fluxos de Consentimento</h1><p class="hint">Clique para abrir cada Sankey em nova aba.</p><ul><li><a href="sankey_akropoli.html" target="_blank">akropoli</a></li>
-<li><a href="sankey_almeidajunior.html" target="_blank">almeidajunior</a></li>
-<li><a href="sankey_bistek.html" target="_blank">bistek</a></li>
-<li><a href="sankey_bumcash.html" target="_blank">bumcash</a></li>
-<li><a href="sankey_c-a-pay.html" target="_blank">c-a-pay</a></li>
-<li><a href="sankey_ckreativ.html" target="_blank">ckreativ</a></li>
-<li><a href="sankey_desconhecida.html" target="_blank">desconhecida</a></li>
-<li><a href="sankey_flowup.html" target="_blank">flowup</a></li>
-<li><a href="sankey_flyup.html" target="_blank">flyup</a></li>
-<li><a href="sankey_global.html" target="_blank">global</a></li>
-<li><a href="sankey_grana-ai.html" target="_blank">grana-ai</a></li>
-<li><a href="sankey_grupo-amp.html" target="_blank">grupo-amp</a></li>
-<li><a href="sankey_incbank.html" target="_blank">incbank</a></li>
-<li><a href="sankey_intelbras.html" target="_blank">intelbras</a></li>
-<li><a href="sankey_kaduceu.html" target="_blank">kaduceu</a></li>
-<li><a href="sankey_luxcs.html" target="_blank">luxcs</a></li>
-<li><a href="sankey_mateus.html" target="_blank">mateus</a></li>
-<li><a href="sankey_menos-juros.html" target="_blank">menos-juros</a></li>
-<li><a href="sankey_ndd.html" target="_blank">ndd</a></li>
-<li><a href="sankey_orago.html" target="_blank">orago</a></li>
-<li><a href="sankey_ottimizza.html" target="_blank">ottimizza</a></li>
-<li><a href="sankey_presenca-bank.html" target="_blank">presenca-bank</a></li>
-<li><a href="sankey_qualimpor.html" target="_blank">qualimpor</a></li>
-<li><a href="sankey_quyta.html" target="_blank">quyta</a></li>
-<li><a href="sankey_randon.html" target="_blank">randon</a></li>
-<li><a href="sankey_seja.html" target="_blank">seja</a></li>
-<li><a href="sankey_sf3.html" target="_blank">sf3</a></li>
-<li><a href="sankey_sgs.html" target="_blank">sgs</a></li>
-<li><a href="sankey_teste.html" target="_blank">teste</a></li>
-<li><a href="sankey_viacapital.html" target="_blank">viacapital</a></li>
-<li><a href="sankey_zilicred.html" target="_blank">zilicred</a></li></ul></body></html>
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Sankeys — Fluxos de Consentimento</title>
+<style>
+:root{
+  --bg:#0b1020; --muted:#8ea1b2; --fg:#e6edf3; --card:#111831;
+  --accent:#12b886; --accent-2:#4dabf7; --border:#22314d; --chip:#2a395a;
+}
+*{box-sizing:border-box}
+body{margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--fg)}
+.container{max-width:1100px; margin:40px auto; padding:0 20px}
+.header{display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin-bottom:20px}
+h1{font-size:28px; margin:0}
+.search{flex:1; min-width:240px; display:flex; gap:10px}
+.search input{
+  flex:1; padding:12px 14px; border-radius:12px; border:1px solid var(--border);
+  background:#0e152b; color:var(--fg); outline:none;
+}
+.chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+.chip{
+  padding:6px 10px; background:var(--chip); border:1px solid var(--border);
+  color:var(--fg); border-radius:999px; font-size:12px; cursor:pointer; user-select:none
+}
+.chip.active{background:var(--accent-2); border-color:transparent}
+.grid{
+  display:grid; grid-template-columns: repeat( auto-fill, minmax(240px,1fr) );
+  gap:16px; margin-top:14px
+}
+.card{
+  display:block; background: linear-gradient(180deg, #0e152b 0%, var(--card) 100%);
+  border:1px solid var(--border); border-radius:18px; padding:16px; text-decoration:none; color:inherit;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+.card:hover{ transform: translateY(-2px); border-color: var(--accent-2); box-shadow: 0 10px 24px rgba(18,184,134,.2)}
+.card-head{display:flex; align-items:center; justify-content:space-between; gap:6px}
+.title{font-weight:700; font-size:16px; line-height:1.3}
+.meta{margin:10px 0 14px; font-size:12px; color:var(--muted)}
+.badge{
+  display:inline-block; margin-left:8px; padding:2px 8px; background:var(--accent);
+  color:#001510; border-radius:999px; font-weight:700; font-size:11px; vertical-align:middle
+}
+.btn{
+  display:inline-block; padding:8px 10px; font-size:12px; border-radius:10px;
+  background:transparent; border:1px solid var(--border); color:var(--fg); width:max-content
+}
+.footer{margin:24px 0 40px; color:var(--muted); font-size:12px}
+hr{border:0; border-top:1px solid var(--border); margin:20px 0}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Sankeys — Fluxos de Consentimento</h1>
+      <div class="search">
+        <input id="q" type="search" placeholder="Buscar por empresa ou status…"/>
+      </div>
+      <div class="chips" id="chips"></div>
+    </div>
+
+    <div class="grid" id="grid">
+      <a class="card" href="sankey_global.html" target="_blank" data-key="global">
+        <div class="card-head">
+          <div class="title">Global <span class="badge">Global</span></div>
+        </div>
+        <div class="meta">sankey_global.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_akropoli.html" target="_blank" data-key="akropoli">
+        <div class="card-head">
+          <div class="title">Akropoli </div>
+        </div>
+        <div class="meta">sankey_akropoli.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_almeidajunior.html" target="_blank" data-key="almeidajunior">
+        <div class="card-head">
+          <div class="title">Almeidajunior </div>
+        </div>
+        <div class="meta">sankey_almeidajunior.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_bistek.html" target="_blank" data-key="bistek">
+        <div class="card-head">
+          <div class="title">Bistek </div>
+        </div>
+        <div class="meta">sankey_bistek.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_bumcash.html" target="_blank" data-key="bumcash">
+        <div class="card-head">
+          <div class="title">Bumcash </div>
+        </div>
+        <div class="meta">sankey_bumcash.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_c-a-pay.html" target="_blank" data-key="c a pay">
+        <div class="card-head">
+          <div class="title">c a Pay </div>
+        </div>
+        <div class="meta">sankey_c-a-pay.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_ckreativ.html" target="_blank" data-key="ckreativ">
+        <div class="card-head">
+          <div class="title">Ckreativ </div>
+        </div>
+        <div class="meta">sankey_ckreativ.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_desconhecida.html" target="_blank" data-key="desconhecida">
+        <div class="card-head">
+          <div class="title">Desconhecida </div>
+        </div>
+        <div class="meta">sankey_desconhecida.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_flowup.html" target="_blank" data-key="flowup">
+        <div class="card-head">
+          <div class="title">Flowup </div>
+        </div>
+        <div class="meta">sankey_flowup.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_flyup.html" target="_blank" data-key="flyup">
+        <div class="card-head">
+          <div class="title">Flyup </div>
+        </div>
+        <div class="meta">sankey_flyup.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_grana-ai.html" target="_blank" data-key="grana ai">
+        <div class="card-head">
+          <div class="title">Grana Ai </div>
+        </div>
+        <div class="meta">sankey_grana-ai.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_grupo-amp.html" target="_blank" data-key="grupo amp">
+        <div class="card-head">
+          <div class="title">Grupo Amp </div>
+        </div>
+        <div class="meta">sankey_grupo-amp.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_incbank.html" target="_blank" data-key="incbank">
+        <div class="card-head">
+          <div class="title">Incbank </div>
+        </div>
+        <div class="meta">sankey_incbank.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_intelbras.html" target="_blank" data-key="intelbras">
+        <div class="card-head">
+          <div class="title">Intelbras </div>
+        </div>
+        <div class="meta">sankey_intelbras.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_kaduceu.html" target="_blank" data-key="kaduceu">
+        <div class="card-head">
+          <div class="title">Kaduceu </div>
+        </div>
+        <div class="meta">sankey_kaduceu.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_luxcs.html" target="_blank" data-key="luxcs">
+        <div class="card-head">
+          <div class="title">Luxcs </div>
+        </div>
+        <div class="meta">sankey_luxcs.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_mateus.html" target="_blank" data-key="mateus">
+        <div class="card-head">
+          <div class="title">Mateus </div>
+        </div>
+        <div class="meta">sankey_mateus.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_menos-juros.html" target="_blank" data-key="menos juros">
+        <div class="card-head">
+          <div class="title">Menos Juros </div>
+        </div>
+        <div class="meta">sankey_menos-juros.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_ndd.html" target="_blank" data-key="ndd">
+        <div class="card-head">
+          <div class="title">Ndd </div>
+        </div>
+        <div class="meta">sankey_ndd.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_orago.html" target="_blank" data-key="orago">
+        <div class="card-head">
+          <div class="title">Orago </div>
+        </div>
+        <div class="meta">sankey_orago.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_ottimizza.html" target="_blank" data-key="ottimizza">
+        <div class="card-head">
+          <div class="title">Ottimizza </div>
+        </div>
+        <div class="meta">sankey_ottimizza.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_presenca-bank.html" target="_blank" data-key="presenca bank">
+        <div class="card-head">
+          <div class="title">Presenca Bank </div>
+        </div>
+        <div class="meta">sankey_presenca-bank.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_qualimpor.html" target="_blank" data-key="qualimpor">
+        <div class="card-head">
+          <div class="title">Qualimpor </div>
+        </div>
+        <div class="meta">sankey_qualimpor.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_quyta.html" target="_blank" data-key="quyta">
+        <div class="card-head">
+          <div class="title">Quyta </div>
+        </div>
+        <div class="meta">sankey_quyta.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_randon.html" target="_blank" data-key="randon">
+        <div class="card-head">
+          <div class="title">Randon </div>
+        </div>
+        <div class="meta">sankey_randon.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_seja.html" target="_blank" data-key="seja">
+        <div class="card-head">
+          <div class="title">Seja </div>
+        </div>
+        <div class="meta">sankey_seja.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_sf3.html" target="_blank" data-key="sf3">
+        <div class="card-head">
+          <div class="title">Sf3 </div>
+        </div>
+        <div class="meta">sankey_sf3.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_sgs.html" target="_blank" data-key="sgs">
+        <div class="card-head">
+          <div class="title">Sgs </div>
+        </div>
+        <div class="meta">sankey_sgs.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_teste.html" target="_blank" data-key="teste">
+        <div class="card-head">
+          <div class="title">Teste </div>
+        </div>
+        <div class="meta">sankey_teste.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_viacapital.html" target="_blank" data-key="viacapital">
+        <div class="card-head">
+          <div class="title">Viacapital </div>
+        </div>
+        <div class="meta">sankey_viacapital.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    
+
+      <a class="card" href="sankey_zilicred.html" target="_blank" data-key="zilicred">
+        <div class="card-head">
+          <div class="title">Zilicred </div>
+        </div>
+        <div class="meta">sankey_zilicred.html</div>
+        <div class="btn">Abrir gráfico</div>
+      </a>
+    </div>
+
+    <hr/>
+    <div class="footer">Gerado automaticamente • Abre cada Sankey em nova aba</div>
+  </div>
+
+<script>
+(function(){
+  const grid = document.getElementById("grid");
+  const q    = document.getElementById("q");
+
+  // cria chips com base nos prefixos dos arquivos
+  const cards = Array.from(grid.querySelectorAll(".card"));
+  const labels = cards.map(c => c.querySelector(".title").textContent.trim());
+  const uniques = Array.from(new Set(labels.map(t => {
+    // heurística: palavra inicial (empresa) para chip
+    return t.replace(/\s+—\s+Global/i,"").split(" ")[0];
+  }))).filter(Boolean).sort();
+
+  const chipsBox = document.getElementById("chips");
+  const chipAll = document.createElement("div");
+  chipAll.className = "chip active"; chipAll.textContent = "Todos";
+  chipsBox.appendChild(chipAll);
+
+  const chips = [chipAll].concat(uniques.map(n=>{
+    const el = document.createElement("div");
+    el.className = "chip"; el.textContent = n;
+    chipsBox.appendChild(el); return el;
+  }));
+
+  let activeChip = chipAll;
+
+  function applyFilter(){
+    const term = q.value.trim().toLowerCase();
+    const chip = activeChip === chipAll ? null : activeChip.textContent.toLowerCase();
+    cards.forEach(c=>{
+      const key = (c.dataset.key || "").toLowerCase();
+      const name = c.querySelector(".title").textContent.toLowerCase();
+      const matchTerm = !term || name.includes(term) || key.includes(term);
+      const matchChip = !chip || name.startsWith(chip);
+      c.style.display = (matchTerm && matchChip) ? "" : "none";
+    });
+  }
+
+  q.addEventListener("input", applyFilter);
+  chips.forEach(el=>{
+    el.addEventListener("click", ()=>{
+      chips.forEach(x=>x.classList.remove("active"));
+      el.classList.add("active");
+      activeChip = el; applyFilter();
+    });
+  });
+
+  applyFilter();
+})();
+</script>
+</body>
+</html>
