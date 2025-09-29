@@ -51,11 +51,11 @@ invisible(lapply(pkgs, library, character.only = TRUE))
 # Crie a conexão com o PostgreSQL na AWS Prod
 con <- dbConnect(
   RPostgres::Postgres(),
-  dbname   = "pfm",
-  host     = "akropoli-production-postgres-rds.ccx6i8auy0tb.us-east-1.rds.amazonaws.com",
-  port     = 5432,
-  user     = "postgres",
-  password = "G7r!p9ZxQsv2LmB4wlNf"   
+  dbname   = "xx",
+  host     = "xxxxx",
+  port     = xx,
+  user     = "xx",
+  password = "xxxxx"   
 )
 
 
